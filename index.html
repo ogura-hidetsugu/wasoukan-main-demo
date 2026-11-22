@@ -19,18 +19,18 @@
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-header__name" href="./">和想館</a>
+    <a class="site-header__name" href="index.html">和想館</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="global-nav">
       <span class="nav-toggle__bar"></span><span class="nav-toggle__bar"></span>
       <span class="visually-hidden">メニュー</span>
     </button>
     <nav id="global-nav" class="global-nav" aria-label="グローバルナビゲーション">
       <ul>
-        <li><a href="./" aria-current="page">トップ</a></li>
-        <li><a href="#about">和想館について</a></li>
-        <li><a href="#events">イベント・相談会</a></li>
-        <li><a href="#care">着物のお手入れ相談会</a></li>
-        <li><a href="#shops">店舗案内</a></li>
+        <li><a href="index.html" aria-current="page">トップ</a></li>
+        <li><a href="about.html">和想館について</a></li>
+        <li><a href="events.html">イベント・相談会</a></li>
+        <li><a href="care.html">着物のお手入れ相談会</a></li>
+        <li><a href="shops.html">店舗案内</a></li>
       </ul>
     </nav>
   </div>
@@ -69,7 +69,7 @@
           <h2 class="h2">イベント・相談会</h2>
           <p class="desc">参加・来場のきっかけになる催しをまとめています。</p>
         </div>
-        <a class="more-link" href="#events">イベント・相談会一覧へ →</a>
+        <a class="more-link" href="events.html">イベント・相談会一覧へ →</a>
       </div>
 
       <div class="filter reveal" role="group" aria-label="カテゴリで絞り込み（表示の確認用）">
@@ -86,7 +86,7 @@
             <div class="card__tags"><span class="pill pill--cat">お手入れ相談会</span><span class="pill pill--open">開催予定</span></div>
             <h3 class="card__title">着物のお手入れ相談会</h3>
             <p class="card__meta">日時：2026年〇月〇日（〇）10:00〜16:00<br>会場：和想館〇〇店（架空）</p>
-            <a class="card__link" href="#care">詳細を見る →</a>
+            <a class="card__link" href="care.html">詳細を見る →</a>
           </div>
         </li>
         <li class="card reveal" data-cat="lecture">
@@ -120,7 +120,7 @@
         <p class="eyebrow">ABOUT</p>
         <h2 class="h2">和想館について</h2>
         <p class="body">着物を「特別な日のもの」だけでなく、暮らしの中で楽しめるものとして届けたい──そんな考え方を、短く紹介する欄です。（紹介文案。理念など）</p>
-        <span class="btn btn--line is-mock" aria-disabled="true" title="下層ページは準備中です">和想館について</span>
+        <a class="btn btn--line" href="about.html">和想館について</a>
       </div>
       <ul class="pillars">
         <li class="pillar reveal"><p class="pillar__key">知る</p><p class="pillar__title">無料講演会</p><p class="pillar__text">着物や日本文化にまつわる話を聞ける場</p></li>
@@ -144,7 +144,7 @@
           <li>着た後のお手入れや保管方法を知りたい</li>
         </ul>
         <p class="note">状態の確認やお見積もりは、現物を拝見してからのご案内になります（写真だけでの判断・効果の保証はしません）。</p>
-        <span class="btn btn--line is-mock" aria-disabled="true" title="下層ページは準備中です">お手入れ・ご相談について</span>
+        <a class="btn btn--line" href="care.html">お手入れ・ご相談について</a>
       </div>
     </div>
   </section>
@@ -167,7 +167,7 @@
         <p class="eyebrow">SHOPS</p>
         <h2 class="h2">店舗案内</h2>
         <p class="body">各店舗の所在地・営業時間・アクセスは、<br>店舗案内ページにまとめています。</p>
-        <span class="btn btn--line is-mock" aria-disabled="true" title="下層ページは準備中です">店舗案内を見る</span>
+        <a class="btn btn--line" href="shops.html">店舗案内を見る</a>
       </div>
       <figure class="media reveal"><img src="assets/img/shops.webp" alt="店内の様子（イメージ）" width="1000" height="667" loading="lazy"></figure>
     </div>
@@ -199,6 +199,13 @@
 
 <footer class="site-footer">
   <p class="site-footer__name">和想館</p>
+  <ul class="site-footer__nav">
+    <li><a href="index.html">トップ</a></li>
+    <li><a href="about.html">和想館について</a></li>
+    <li><a href="events.html">イベント・相談会</a></li>
+    <li><a href="care.html">着物のお手入れ相談会</a></li>
+    <li><a href="shops.html">店舗案内</a></li>
+  </ul>
   <p class="site-footer__note">このサイトは、小倉英嗣が応募用に制作した非公式の自主制作デモです。<br>和想館の公式サイトではありません。予約・購入・お問い合わせは受け付けていません。</p>
 </footer>
 

@@ -1,5 +1,6 @@
 /* 和想館 トップページ（非公式・自主制作デモ）
    - ヒーロー：扇形マスクの中で写真をじわっと切り替え
+   - 下層ページ：扇形の写真をゆっくり表示
    - スクロールに合わせたフェードイン
    - イベントの絞り込み（表示確認用。データ送信はしません）
    - スマホ用メニュー */
@@ -39,6 +40,10 @@
       });
     }
   }
+
+  /* ---------- 下層ページの見出し ---------- */
+  var sub = document.querySelector('.subhero');
+  if (sub) { setTimeout(function () { sub.classList.add('is-ready'); }, 200); }
 
   /* ---------- スクロールで表示 ---------- */
   var targets = document.querySelectorAll('.reveal');
