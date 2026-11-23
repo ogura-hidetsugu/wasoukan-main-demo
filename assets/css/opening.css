@@ -1,0 +1,210 @@
+/* ==========================================================================
+   オープニングアニメーション（index.html 専用）
+   - 白い幕 → 筆ロゴが描かれる → 和想館の文字 → ロゴがヒーローの
+     扇形マスクと同じ位置へ移動 → インクが写真へ溶ける → 幕が左右に開く
+   - 制御は opening.js。JavaScriptが無効な場合は一切表示されない
+   - prefers-reduced-motion では再生しない（opening.js / インライン側で判定）
+   ========================================================================== */
+
+/* ---- 出る・消えるの基本 ---- */
+.opening {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* head内のインラインスクリプトが付けるクラス（初回描画から白幕を被せる） */
+html.wsk-opening .opening { visibility: visible; pointer-events: auto; }
+.opening.is-active { visibility: visible; pointer-events: auto; }
+
+/* 終了時はふっと消えて画面を明け渡す */
+.opening.is-done,
+html.wsk-opening .opening.is-done,
+.opening.is-active.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, visibility 0s .25s;
+}
+
+/* 再生中は背面のスクロールを止める */
+html.wsk-opening,
+html.wsk-opening body { overflow: hidden; }
+
+/* ---- 白い幕（左右） ---- */
+.opening__screen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.1%;
+  z-index: 1;
+  background: #f3eee3; /* ヒーロー背景 --c-hero と同色 */
+  transition: transform .75s cubic-bezier(.8, 0, .2, 1);
+}
+.opening__screen--left  { left: 0; }
+.opening__screen--right { right: 0; }
+.opening.is-open .opening__screen--left  { transform: translateX(-102%); }
+.opening.is-open .opening__screen--right { transform: translateX(102%); }
+
+/* ---- 横切る淡い光 ---- */
+.opening__wash {
+  position: absolute;
+  inset: -20%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(116deg,
+    transparent 35%,
+    rgba(122, 90, 128, .10) 49%,
+    transparent 62%);
+}
+.opening.is-active .opening__wash { animation: wsk-wash 1.2s ease .1s both; }
+
+/* ---- 中央の縦線 ---- */
+.opening__line {
+  position: absolute;
+  top: 14%;
+  bottom: 14%;
+  width: 1px;
+  left: 50%;
+  z-index: 2;
+  transform: scaleY(0);
+  opacity: 0;
+  background: linear-gradient(transparent, rgba(113, 80, 120, .45), transparent);
+}
+.opening.is-phase2 .opening__line { animation: wsk-line .75s ease .05s both; }
+
+/* ---- 引き継ぎ用の写真（マスク形。幕の上でインクから写真へ変わる） ---- */
+.opening__photo {
+  position: fixed;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .55s ease;
+  -webkit-mask: url(../img/hero-mask.png) left top / 100% 100% no-repeat;
+          mask: url(../img/hero-mask.png) left top / 100% 100% no-repeat;
+  background: url(../img/hero-01.webp) 50% 62% / cover no-repeat;
+}
+.opening.is-cross .opening__photo { opacity: 1; }
+
+/* ---- ロゴと文字のグループ ---- */
+.opening__group {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* ロゴの箱：FLIP（位置と大きさの移し替え）はこの要素で行う */
+.opening__logo-wrap {
+  width: min(560px, 78vw);
+  will-change: transform;
+  transition: transform .75s cubic-bezier(.7, 0, .25, 1);
+}
+.opening__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 1;
+  transition: opacity .55s ease;
+}
+/* 筆で描かれる登場 */
+.opening.is-active .opening__logo {
+  animation: wsk-brush .85s ease-out both;
+}
+/* インクが写真へ溶ける */
+.opening.is-cross .opening__logo { opacity: 0; }
+
+/* 和想館の文字 */
+.opening__name {
+  margin: 30px 0 0;
+  font-family: var(--f-serif, "Noto Serif JP", serif);
+  font-size: clamp(20px, 3vw, 27px);
+  font-weight: 500;
+  color: var(--c-purple, #431c46);
+  opacity: 0;
+  text-indent: .3em; /* letter-spacing のぶん右に寄るのを整える */
+}
+.opening.is-active .opening__name { animation: wsk-name .7s ease .4s both; }
+.opening.is-phase2 .opening__name { animation: wsk-name-out .4s ease both; }
+
+/* 文字下の罫線 */
+.opening__rule {
+  display: block;
+  width: min(360px, 50vw);
+  height: 1px;
+  margin-top: 22px;
+  background: rgba(113, 80, 120, .5);
+  transform: scaleX(0);
+}
+.opening.is-active .opening__rule { animation: wsk-rule .55s ease .6s both; }
+.opening.is-phase2 .opening__rule { animation: wsk-rule-out .35s ease both; }
+
+/* ---- スキップボタン ---- */
+.opening__skip {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 5;
+  padding: 10px 20px;
+  border: 1px solid rgba(47, 42, 37, .3);
+  border-radius: 999px;
+  background: rgba(253, 252, 248, .75);
+  color: var(--c-sub, #6b6157);
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: .25em;
+  text-indent: .25em;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease .5s;
+}
+.opening.is-active .opening__skip { opacity: 1; pointer-events: auto; }
+.opening__skip:focus-visible {
+  outline: 2px solid var(--c-accent, #8e2f3a);
+  outline-offset: 3px;
+}
+
+/* ---- タイムライン（全体 約3.3秒） ---- */
+/* 0.00-0.85s 筆が左から右へ描かれる */
+@keyframes wsk-brush {
+  0%   { clip-path: inset(0 100% 0 0); transform: translateX(-24px); }
+  100% { clip-path: inset(0 0 0 0);    transform: translateX(0); }
+}
+/* 0.10-1.30s 淡い光が横切る */
+@keyframes wsk-wash {
+  0%   { opacity: 0; transform: translateX(-50%); }
+  18%  { opacity: 1; }
+  61%  { opacity: 0; transform: translateX(45%); }
+  100% { opacity: 0; transform: translateX(45%); }
+}
+/* 0.40-1.10s 文字が現れて整う */
+@keyframes wsk-name {
+  0%   { opacity: 0; letter-spacing: .65em; transform: translateY(10px); }
+  100% { opacity: 1; letter-spacing: .3em;  transform: translateY(0); }
+}
+@keyframes wsk-name-out {
+  0%   { opacity: 1; letter-spacing: .3em; transform: translateY(0); }
+  100% { opacity: 0; letter-spacing: .42em; transform: translateY(-6px); }
+}
+/* 0.60-1.15s 罫線 */
+@keyframes wsk-rule {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes wsk-rule-out {
+  0%   { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1.3); opacity: 0; }
+}
+/* phase2：縦線が引かれて消える */
+@keyframes wsk-line {
+  0%   { opacity: 0; transform: scaleY(0); }
+  45%  { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(1.15); }
+}

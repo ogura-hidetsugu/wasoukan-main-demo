@@ -10,10 +10,44 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/img/hero-01.webp">
+<link rel="preload" as="image" href="assets/img/fude-logo.webp">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/opening.css">
 <script>document.documentElement.classList.add('js');</script>
+<script>
+/* オープニングアニメーションの再生判定（セッションで1回のみ。
+   ?opening=1 を付けると手動再生。減速設定・ページ内リンクでは再生しない） */
+(function () {
+  try {
+    if (location.hash) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var manual = new URLSearchParams(location.search).get('opening') === '1';
+    if (!manual && sessionStorage.getItem('wsk-opening') === '1') return;
+    sessionStorage.setItem('wsk-opening', '1');
+    document.documentElement.classList.add('wsk-opening');
+  } catch (e) { /* 判定できない環境では再生しない */ }
+})();
+</script>
 </head>
 <body>
+
+<!-- オープニングアニメーション：再生の判定・制御は opening.js（減速設定や
+     JavaScriptが無効な場合は表示されない。スキップ可） -->
+<div class="opening" id="opening" aria-hidden="true">
+  <div class="opening__screen opening__screen--left"></div>
+  <div class="opening__screen opening__screen--right"></div>
+  <div class="opening__wash" aria-hidden="true"></div>
+  <div class="opening__line" aria-hidden="true"></div>
+  <div class="opening__photo" aria-hidden="true"></div>
+  <div class="opening__group" aria-hidden="true">
+    <div class="opening__logo-wrap">
+      <img class="opening__logo" src="assets/img/fude-logo.webp" alt="" width="1440" height="566" fetchpriority="high">
+    </div>
+    <p class="opening__name">和想館</p>
+    <span class="opening__rule" aria-hidden="true"></span>
+  </div>
+  <button class="opening__skip" type="button" id="opening-skip" tabindex="-1">スキップ</button>
+</div>
 
 <p class="notice-bar">自主制作・非公式のサイト試作です。予約・購入・お問い合わせは受け付けていません。</p>
 
@@ -212,5 +246,6 @@
 </footer>
 
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/opening.js" defer></script>
 </body>
 </html>
